@@ -25,28 +25,28 @@ app.get("/about", function(req,res){
 
   app.get("/blog", function(req,res){
     blog.getPublishedPosts().then(function(posts){
-    res.send(posts);
+    res.json(posts);
     })
     .catch(function(err){
-    res.send({"message":err});
+    res.json({"message":err});
     });
   });
 
   app.get("/posts", function(req,res){
     blog.getAllPosts().then(function(posts){
-        res.send(posts);
+        res.json(posts);
         })
         .catch(function(err){
-        res.send({"message":err});
+        res.json({"message":err});
         });
   });
 
   app.get("/categories", function(req,res){
     blog.getCategories().then(function(categories){
-        res.send(categories);
+        res.json(categories);
         })
         .catch(function(err){
-        res.send({"message":err});
+        res.json({"message":err});
         });
   });
 

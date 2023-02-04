@@ -1,3 +1,18 @@
+/*********************************************************************************
+* WEB322 – Assignment 02
+* I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part
+* of this assignment has been copied manually or electronically from any other source
+* (including 3rd party web sites) or distributed to other students.
+*
+* Name: ____Meetpal Singh____________ Student ID: __125926212_ Date: _2023/2/3_________
+*
+* Cyclic Web App URL: _______________https://inquisitive-battledress-pig.cyclic.app/
+*
+* GitHub Repository URL: _________https://github.com/meetpal0001/web322-app.git
+*
+********************************************************************************/
+
+
 var express = require("express");
 var path = require("path");
 var blog=require("./blog-service");

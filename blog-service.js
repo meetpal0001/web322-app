@@ -39,6 +39,44 @@ var categories;
     });
 }
 
+module.exports.getPostsByCategory=function(category){
+    return new Promise(function(resolve,reject){
+
+        let newPosts=posts.filter(Element=>Element.category==category);
+        if (newPosts.length==0) {
+            reject("no results returned")
+        } else {
+            resolve(newPosts);
+        }
+    });
+}
+
+module.exports.getPostsByMinDate=function(minDateStr){
+    return new Promise(function(resolve,reject){
+
+        let newPosts=posts.filter(Element=>new Date(Element.postDate)>=new Date(minDateStr));
+        if (newPosts.length==0) {
+            reject("no results returned")
+        } else {
+            resolve(newPosts);
+        }
+    });
+
+}
+
+module.exports.getPostsById=function(id){
+    return new Promise(function(resolve,reject){
+
+        let newPosts=posts.filter(Element=>Element.id==id);
+        if (newPosts.length==0) {
+            reject("no results returned")
+        } else {
+            resolve(newPosts);
+        }
+    });
+
+}
+
 
 module.exports.getPublishedPosts=function(){
 
@@ -67,4 +105,21 @@ module.exports.getPublishedPosts=function(){
             resolve(categories);
         }
     });
+
+    
+}
+
+module.exports.addPost=function(postData){
+       return new Promise(function(resolve,reject){
+        if (typeof(postData.published=="undefined")) {
+            postData.published=false;
+        } else {
+            postData.published=true;    
+        }
+
+        postData.id=posts.length+1;
+
+        posts.push(postData);
+        resolve(postData);
+       }); 
 }

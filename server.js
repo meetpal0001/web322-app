@@ -49,6 +49,12 @@ app.get("/", function(req,res){
     res.redirect("/about");
 });
 
+
+app.get("/posts/add", function(req,res){
+  res.sendFile(path.join(__dirname,"/views/addPost.html"));
+});
+
+
 // setup another route to listen on /about
 app.get("/about", function(req,res){
     res.sendFile(path.join(__dirname,"/views/about.html"));
@@ -122,10 +128,6 @@ app.get("/about", function(req,res){
       });
   });
 
-
-  app.get("/posts/add", function(req,res){
-    res.sendFile(path.join(__dirname,"/views/addPost.html"));
-  });
 
   app.post("/posts/add", upload.single("featureImage"),function(req,res){
     

@@ -111,6 +111,16 @@ module.exports.getPublishedPosts=function(){
 
 module.exports.addPost=function(postData){
        return new Promise(function(resolve,reject){
+
+        const date = new Date();
+
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+
+       
+
+        postData.postDate=`${year}-${month}-${day}`;
         if (typeof(postData.published=="undefined")) {
             postData.published=false;
         } else {
@@ -118,6 +128,8 @@ module.exports.addPost=function(postData){
         }
 
         postData.id=posts.length+1;
+
+        
 
         posts.push(postData);
         resolve(postData);

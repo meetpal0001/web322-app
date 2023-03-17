@@ -77,6 +77,19 @@ module.exports.getPostsById=function(id){
 
 }
 
+module.exports.getPostById=function(id){
+    return new Promise(function(resolve,reject){
+
+        let newPosts=posts.filter(Element=>Element.id==id);
+        if (newPosts.length==0) {
+            reject("no results returned")
+        } else {
+            resolve(newPosts[0]);
+        }
+    });
+
+}
+
 
 module.exports.getPublishedPosts=function(){
 
@@ -92,6 +105,21 @@ module.exports.getPublishedPosts=function(){
         }
     });
 }
+
+
+module.exports.getPublishedPostsByCategory=function(category){
+    let arr=posts.filter(Element=>Element.published&&Element.category==category);
+
+    return new Promise(function(resolve,reject){
+
+        if (arr.length==0) {
+            reject("no results returned");
+        } else {
+            resolve(arr);
+        }
+    });
+};
+
 
  module.exports.getCategories=function(){
 
@@ -121,10 +149,10 @@ module.exports.addPost=function(postData){
        
 
         postData.postDate=`${year}-${month}-${day}`;
-        if (typeof(postData.published=="undefined")) {
-            postData.published=false;
+        if (postData.published) {
+            postData.published=true;
         } else {
-            postData.published=true;    
+            postData.published=false;    
         }
 
         postData.id=posts.length+1;

@@ -4,7 +4,7 @@
 * of this assignment has been copied manually or electronically from any other source
 * (including 3rd party web sites) or distributed to other students.
 *
-* Name: ____Meetpal Singh____________ Student ID: __125926212_ Date: _2023/2/17_________
+* Name: ____Meetpal Singh____________ Student ID: __125926212_ Date: _2023/3/17_________
 *
 * Cyclic Web App URL: _______________https://inquisitive-battledress-pig.cyclic.app/
 *
@@ -37,6 +37,7 @@ const upload = multer(); // no { storage: storage } since we are not using disk 
 
 var app = express();
 
+app.use(express.urlencoded({extended: true}));
 
 app.engine('.hbs', exphbs.engine({
   extname: '.hbs',
@@ -59,7 +60,14 @@ app.engine('.hbs', exphbs.engine({
 
     safeHTML: function (context) {
       return stripJs(context);
-    }
+    },
+
+    formatDate: function(dateObj){
+      let year = dateObj.getFullYear();
+      let month = (dateObj.getMonth() + 1).toString();
+      let day = dateObj.getDate().toString();
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+      }
   }
 }));
 app.set('view engine', '.hbs');
@@ -91,10 +99,42 @@ app.get("/", function (req, res) {
 
 
 app.get("/posts/add", function (req, res) {
-  res.render('addPost');
+  blog.getCategories().then(function(data){
+    res.render("addPost", {categories:data});
+  }).catch(function(){
+    res.render("addPost", {categories: []});
+  })
 
 });
 
+
+app.get("/categories/delete/:id", function (req, res) {
+  id = req.params.id;
+  blog.deleteCategoryById(id).then(function(){
+    res.redirect('/categories');
+
+  }).catch(function(){
+    res.status(500).send("Unable to Remove Category / Category not found)");
+  })
+
+});
+
+
+app.get("/posts/delete/:id", function (req, res) {
+  id = req.params.id;
+  blog.deletePostById(id).then(function(){
+    res.redirect('/posts');
+
+  }).catch(function(){
+    res.status(500).send("Unable to Remove Post / Post not found)");
+  })
+
+});
+
+app.get("/categories/add", function (req, res) {
+  res.render('addCategory');
+
+});
 
 // setup another route to listen on /about
 app.get("/about", function (req, res) {
@@ -205,10 +245,15 @@ app.get("/posts", function (req, res) {
     let date = req.query.minDate;
     if (cat != undefined) {
       blog.getPostsByCategory(cat).then(function (posts) {
+        if(posts.length>0){
         res.render("posts", {
           posts:
             posts
-        })
+        })}
+
+        else{
+          res.render("posts",{ message: "no results" });
+        }
 
       })
         .catch(function (err) {
@@ -218,10 +263,15 @@ app.get("/posts", function (req, res) {
 
     } else if (date != undefined) {
       blog.getPostsByMinDate(date).then(function (posts) {
+        if(posts.length>0){
         res.render("posts", {
           posts:
             posts
-        })
+        })}
+
+        else{
+          res.render("posts",{ message: "no results" });
+        }
 
       })
         .catch(function (err) {
@@ -230,9 +280,16 @@ app.get("/posts", function (req, res) {
         })
     }
 
-    else
+    else{
+      if(posts.length>0){
       res.render("posts", { posts: posts })
+    }
 
+      else{
+        res.render("posts",{ message: "no results" });
+      }
+
+    }
   })
     .catch(function (err) {
       res.render("posts", { message: "no results" });
@@ -241,7 +298,13 @@ app.get("/posts", function (req, res) {
 
 app.get("/categories", function (req, res) {
   blog.getCategories().then(function (categories) {
+    if(categories.length>0){
     res.render("categories", { categories: categories });
+  }
+
+  else{
+    res.render("categories",{ message: "no results" });
+  }
   })
     .catch(function (err) {
       res.render("categories",
@@ -252,7 +315,7 @@ app.get("/categories", function (req, res) {
 app.get("/posts/:value", function (req, res) {
   blog.getAllPosts().then(function (posts) {
     id = req.params.value;
-    blog.getPostsById(id).then(function (posts) {
+    blog.getPostById(id).then(function (posts) {
       res.json(posts);
 
     })
@@ -300,12 +363,18 @@ app.post("/posts/add", upload.single("featureImage"), function (req, res) {
     // TODO: Process the req.body and add it as a new Blog Post before redirecting to /posts
 
 
-    blog.addPost(req.body).then(function (postData) {
+    blog.addPost(req.body).then(function () {
       res.redirect('/posts');
     })
   }
 });
 
+app.post("/categories/add", function (req, res) {
+
+  blog.addCategory(req.body).then(function () {
+    res.redirect('/categories');
+  })
+});
 
 app.use((req, res) => {
   res.status(404).render("404",

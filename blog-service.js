@@ -67,6 +67,8 @@ module.exports.getPostsByCategory=function(cat){
 
 module.exports.getPostsByMinDate=function(minDateStr){
     return new Promise((resolve, reject) => {
+        const {gte}=Sequelize.Op;
+        
         Post.findAll({
             where: {
                 postDate: {
@@ -92,7 +94,7 @@ module.exports.getPostById=function(i){
                 id: i
             }
         }).then(function(data){        
-            resolve(data);
+            resolve(data[0]);
     
         }).catch(function(){
             reject("no results returned");

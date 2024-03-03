@@ -2,9 +2,12 @@
     <section class="main col-md-9">
         {{#if data.post}}
         <article>
+            
             <h2>{{data.post.title}}</h2>
+            {{#if data.post.featureImage}}
             <img src={{data.post.featureImage}} alt="feature Image" style="width:100%" />
             <br /><br />
+            {{/if}}
             {{#safeHTML data.post.body}}{{/safeHTML}}
             <br /><br />
             <strong>Category:</strong> {{data.post.category}}<br />

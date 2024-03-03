@@ -16,7 +16,7 @@ var Post = sequelize.define('Post', {
     body: Sequelize.TEXT,  // entry title
     title: Sequelize.STRING, // author of the entry
     postDate: Sequelize.DATE, // Date the entry was posted
-
+ 
     featureImage: Sequelize.STRING, // main text for the entry
     published: Sequelize.BOOLEAN // number of views
 });
@@ -33,7 +33,7 @@ module.exports.initialize=function(){
     return new Promise((resolve, reject) => {
         sequelize.sync().then(function () {
             resolve();
-}).catch(function () {
+}).catch(function () { 
     reject("unable to sync the database");    
 })
         });
@@ -87,7 +87,7 @@ module.exports.getPostsByMinDate=function(minDateStr){
 
 
 
-module.exports.getPostById=function(i){
+module. exports.getPostById=function(i){
     return new Promise((resolve, reject) => {
         Post.findAll({
             where: {

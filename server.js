@@ -19,7 +19,7 @@ var blog = require("./blog-service");
 var authData = require("./auth-service");
 
 const bodyParser = require('body-parser');
-const clientSessions=require('client-sessions');
+const clientSessions = require('client-sessions');
 const exphbs = require('express-handlebars');
 const stripJs = require('strip-js');
 
@@ -38,7 +38,7 @@ const upload = multer(); // no { storage: storage } since we are not using disk 
 
 var app = express();
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(clientSessions({
   cookieName: "session", // this is the object name that will be added to 'req'
@@ -72,31 +72,31 @@ app.engine('.hbs', exphbs.engine({
       return stripJs(context);
     },
 
-    formatDate: function(dateObj){
+    formatDate: function (dateObj) {
       let year = dateObj.getFullYear();
       let month = (dateObj.getMonth() + 1).toString();
       let day = dateObj.getDate().toString();
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
-      }
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
   }
 }));
 app.set('view engine', '.hbs');
 
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.session = req.session;
   next();
-  });
+});
 
 
-  function ensureLogin(req, res, next) {
-    if (!req.session.user) {
-      res.redirect("/login");
-    } else {
-      next();
-    }
+function ensureLogin(req, res, next) {
+  if (!req.session.user) {
+    res.redirect("/login");
+  } else {
+    next();
   }
-  
+}
+
 var HTTP_PORT = process.env.PORT || 8080;
 
 // call this function after the http server starts listening for requests
@@ -121,11 +121,11 @@ app.get("/", function (req, res) {
 });
 
 
-app.get("/posts/add", ensureLogin,function (req, res) {
-  blog.getCategories().then(function(data){
-    res.render("addPost", {categories:data});
-  }).catch(function(){
-    res.render("addPost", {categories: []});
+app.get("/posts/add", ensureLogin, function (req, res) {
+  blog.getCategories().then(function (data) {
+    res.render("addPost", { categories: data });
+  }).catch(function () {
+    res.render("addPost", { categories: [] });
   })
 
 });
@@ -133,10 +133,10 @@ app.get("/posts/add", ensureLogin,function (req, res) {
 
 app.get("/categories/delete/:id", ensureLogin, function (req, res) {
   id = req.params.id;
-  blog.deleteCategoryById(id).then(function(){
+  blog.deleteCategoryById(id).then(function () {
     res.redirect('/categories');
 
-  }).catch(function(){
+  }).catch(function () {
     res.status(500).send("Unable to Remove Category / Category not found)");
   })
 
@@ -145,10 +145,10 @@ app.get("/categories/delete/:id", ensureLogin, function (req, res) {
 
 app.get("/posts/delete/:id", ensureLogin, function (req, res) {
   id = req.params.id;
-  blog.deletePostById(id).then(function(){
+  blog.deletePostById(id).then(function () {
     res.redirect('/posts');
 
-  }).catch(function(){
+  }).catch(function () {
     res.status(500).send("Unable to Remove Post / Post not found)");
   })
 
@@ -203,6 +203,8 @@ app.get('/blog', async (req, res) => {
 
     // store the "categories" data in the viewData object (to be passed to the view)
     viewData.categories = categories;
+
+
   } catch (err) {
     viewData.categoriesMessage = "no results"
   }
@@ -268,14 +270,15 @@ app.get("/posts", ensureLogin, function (req, res) {
     let date = req.query.minDate;
     if (cat != undefined) {
       blog.getPostsByCategory(cat).then(function (posts) {
-        if(posts.length>0){
-        res.render("posts", {
-          posts:
-            posts
-        })}
+        if (posts.length > 0) {
+          res.render("posts", {
+            posts:
+              posts
+          })
+        }
 
-        else{
-          res.render("posts",{ message: "no results" });
+        else {
+          res.render("posts", { message: "no results" });
         }
 
       })
@@ -286,14 +289,15 @@ app.get("/posts", ensureLogin, function (req, res) {
 
     } else if (date != undefined) {
       blog.getPostsByMinDate(date).then(function (posts) {
-        if(posts.length>0){
-        res.render("posts", {
-          posts:
-            posts
-        })}
+        if (posts.length > 0) {
+          res.render("posts", {
+            posts:
+              posts
+          })
+        }
 
-        else{
-          res.render("posts",{ message: "no results" });
+        else {
+          res.render("posts", { message: "no results" });
         }
 
       })
@@ -303,13 +307,13 @@ app.get("/posts", ensureLogin, function (req, res) {
         })
     }
 
-    else{
-      if(posts.length>0){
-      res.render("posts", { posts: posts })
-    }
+    else {
+      if (posts.length > 0) {
+        res.render("posts", { posts: posts })
+      }
 
-      else{
-        res.render("posts",{ message: "no results" });
+      else {
+        res.render("posts", { message: "no results" });
       }
 
     }
@@ -321,13 +325,13 @@ app.get("/posts", ensureLogin, function (req, res) {
 
 app.get("/categories", ensureLogin, function (req, res) {
   blog.getCategories().then(function (categories) {
-    if(categories.length>0){
-    res.render("categories", { categories: categories });
-  }
+    if (categories.length > 0) {
+      res.render("categories", { categories: categories });
+    }
 
-  else{
-    res.render("categories",{ message: "no results" });
-  }
+    else {
+      res.render("categories", { message: "no results" });
+    }
   })
     .catch(function (err) {
       res.render("categories",
@@ -407,36 +411,37 @@ app.post("/login", function (req, res) {
   req.body.userAgent = req.get('User-Agent');
   authData.checkUser(req.body).then((user) => {
     req.session.user = {
-    userName:user.userName, // authenticated user's userName
-    email: user.email,// authenticated user's email
-    loginHistory: user.loginHistory// authenticated user's loginHistory
+      userName: user.userName, // authenticated user's userName
+      email: user.email,// authenticated user's email
+      loginHistory: user.loginHistory// authenticated user's loginHistory
     }
     res.redirect('/posts');
-    }).catch((err)=>{
-      res.render('login',{errorMessage: err, userName: req.body.userName});
-    })
+  }).catch((err) => {
+    res.render('login', { errorMessage: err, userName: req.body.userName });
+  })
 });
 
 app.get("/register", function (req, res) {
   res.render('register');
 });
 
-app.post("/register", function (req, res) {4
-  authData.registerUser(req.body).then(()=>{
-    res.render('register',{successMessage: "User created"});
-  }).catch((err)=>{
-    res.render('register',{errorMessage: err, userName: req.body.userName});
+app.post("/register", function (req, res) {
+  4
+  authData.registerUser(req.body).then(() => {
+    res.render('register', { successMessage: "User created" });
+  }).catch((err) => {
+    res.render('register', { errorMessage: err, userName: req.body.userName });
   })
 });
 
-app.get("/logout", function(req, res) {
+app.get("/logout", function (req, res) {
   req.session.reset();
   res.redirect("/");
 });
 
-app.get("/userHistory", ensureLogin,function(req, res) {
+app.get("/userHistory", ensureLogin, function (req, res) {
   res.render('userHistory');
- 
+
 });
 
 app.use((req, res) => {
@@ -447,11 +452,11 @@ app.use((req, res) => {
 // setup http server to listen on HTTP_PORT
 
 blog.initialize()
-.then(authData.initialize)
-.then(function(){
-app.listen(HTTP_PORT, function(){
-console.log("app listening on: " + HTTP_PORT)
-});
-}).catch(function(err){
-console.log("unable to start server: " + err);
-});
+  .then(authData.initialize)
+  .then(function () {
+    app.listen(HTTP_PORT, function () {
+      console.log("app listening on: " + HTTP_PORT)
+    });
+  }).catch(function (err) {
+    console.log("unable to start server: " + err);
+  });

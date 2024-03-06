@@ -1,0 +1,32 @@
+.nav{
+    background: #1A1B21;
+    border: #23252C;
+}
+
+.skinText{
+    color: #F3BF99 !important;
+}
+
+a:active{
+    background: #5093E2 !important;
+    color: #ffffff !important;
+}
+
+body{
+    background: #23252C;
+    color: #ffffff;
+}
+
+.btnRed {
+    background-color: #f44336 !important;
+    color: white !important;
+    padding: 14px 25px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    border-radius: 9px;
+  }
+  
+  .btnRed:hover, .btnRed:active {
+    background-color: red;
+  } 

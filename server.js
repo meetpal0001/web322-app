@@ -28,9 +28,9 @@ const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
 
 cloudinary.config({
-  cloud_name: 'dtthrsqfm',
-  api_key: '226173794417651',
-  api_secret: 'NPYA_H3dkcelNGL1gAIXo3UtBSs',
+  cloud_name: 'dl8suci0p',
+  api_key: '154896697852268',
+  api_secret: '3xiB-rvmIA8dtonOGYnpaiOuLkM',
   secure: true
 });
 
@@ -44,7 +44,7 @@ app.use(clientSessions({
   cookieName: "session", // this is the object name that will be added to 'req'
   secret: "wbe322_assignment", // this should be a long un-guessable string.
   duration: 2 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
-  activeDuration: 1000 * 60 // the session will be extended by this many ms each request (1 minute)
+  activeDuration: 2000 * 60 // the session will be extended by this many ms each request (2 minute)
 }));
 
 

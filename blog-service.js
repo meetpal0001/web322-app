@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
+require('dotenv').config();
 
-var sequelize = new Sequelize('easpgdaf', 'easpgdaf', 'q0g2NxyLQBIAWvzhnTCNKzv2B8RPtLlc', {
-host: 'trumpet.db.elephantsql.com',
+var sequelize = new Sequelize(process.env.POSTGRE_USER_ID, process.env.POSTGRE_USER_ID, process.env.POSTGRE_USER_PASSWORD, {
+host:  process.env.POSTGRE_HOST_NAME,
 dialect: 'postgres',
 port: 5432,
 dialectOptions: {

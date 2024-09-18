@@ -12,6 +12,8 @@
 *
 *******************************************************************************/
 
+//adds support for .env
+require('dotenv').config(); 
 
 var express = require("express");
 var path = require("path");
@@ -28,9 +30,9 @@ const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
 
 cloudinary.config({
-  cloud_name: 'dl8suci0p',
-  api_key: '154896697852268',
-  api_secret: '3xiB-rvmIA8dtonOGYnpaiOuLkM',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true
 });
 
